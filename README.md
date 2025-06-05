@@ -1,0 +1,131 @@
+# 🧪 UI & API Automation Framework
+
+This repository showcases a robust test automation framework for **UI and API testing**, leveraging modern tools and best practices for scalability, maintainability, and reporting.
+
+---
+
+## 🔍 Tech Stack Overview
+
+| Area           | Folder                      | Tools/Frameworks Used                      |
+|----------------|-----------------------------|--------------------------------------------|
+| UI Testing     | transmedia_ui_testing       | Python, Playwright, Pytest, Allure         |
+| API Testing    | API Testing                 | Postman, Newman                            |
+
+---
+
+## 🚀 UI Automation
+
+### ✅ Technologies Used
+- **Language**: Python
+- **Automation Tool**: Playwright
+- **Test Runner**: Pytest
+- **Framework Design**: Page Object Model (POM)
+- **Reporting**: Allure Reports
+
+### 📁 Structure
+```
+transmedia_ui_testing/
+├── pages/                # Page Object Model files
+├── tests/                # Pytest test cases
+├── conftest.py           # Fixtures and hooks
+├── pytest.ini            # Configure Pytest
+├── test_data/            # Test data files (JSON)
+└── utils/                # Utility methods (helpers)
+```
+
+### 📸 Sample Features
+- End-to-end UI automation flows
+- Browser context management
+- Screenshots captured on failures
+- Allure integrated reporting
+- Allure reports generates by default
+- Allure report served after execution by default
+
+### 📊 Allure Report
+📎 [View Allure Report](https://mahmud-i.github.io/transmedia-ui-assessment-allure-report/)
+
+---
+
+## 🔗 API Automation (Postman)
+
+### 🧰 Tools Used
+- **Tool**: Postman
+- **Execution**: Newman CLI
+- **Assertions**: Postman Scripts
+- **Reporting**: HTML & PDF via Newman Reporter
+
+### 📁 Structure
+```
+API Testing/
+├── Transmedia-API-collection.json
+├── Transmedia-API-env.json
+├── Transedia-API-report.html             # Newman reports HTML
+├── Transedia-API-report.pdf              # Newman reports PDF   
+```
+
+### 🔍 Features
+- Parameterized endpoints using environments
+- Test validation with built-in scripts
+- Automated collection execution with Newman
+- Generate shareable HTML/PDF reports
+
+### 📝 Sample Test Scripts
+```javascript
+// In Tests tab of Postman
+let jsonData = pm.response.json();
+const expected_3 = pm.environment.get("list_data_3");
+const list_3 = pm.environment.get("list_name_3");
+const list_qty = pm.environment.get("list_quantity");
+
+pm.test("Successful List Data Response", function() {
+    pm.expect(pm.response.code).to.eq(200);
+});
+
+if(jsonData) {
+
+    pm.test("Check List quantity reduced", function() {
+        pm.expect(jsonData.length).to.be.at.least(list_qty-1);
+    });
+
+    pm.test("Check Third list deleted", function() {
+        const found_3 = jsonData.some(item =>
+        item.name === list_3 || JSON.stringify(item) === expected_3
+        );
+        pm.expect(found_3).to.be.false;
+    });
+
+} else {
+
+    pm.test("List data missing", function() {
+        pm.expect.fail("List Data is not present in the response");
+    });
+    
+}
+```
+
+### 📎 Newman Report
+🖨️ [Download Newman PDF Report](https://github.com/mahmud-i/transmedia-assessment/blob/main/API%20Testing/Transedia-API-report.pdf)
+
+---
+
+## 🧩 Setup & Run
+
+### 🐍 UI Tests
+```bash
+pip install -r requirements.txt
+pytest
+```
+
+### 🧪 API Tests
+```bash
+newman run Postman_Collection.json \
+  -e Postman_Environment.json \
+  -r cli,htmlextra,json,reporter-pdf
+```
+
+---
+
+## 📦 Requirements
+- Python 3.9+
+- Node.js & Newman
+- Allure CLI
