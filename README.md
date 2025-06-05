@@ -42,7 +42,7 @@ transmedia_ui_testing/
 - Allure report served after execution by default
 
 ### 📊 Allure Report
-📎 [View Allure Report](https://mahmud-i.github.io/transmedia-ui-assessment-allure-report/)
+📎 [View Allure Report](https://mahmud-i.github.io/transmedia-ui-assessment-allure-report/){:target="_blank"}
 
 ---
 
@@ -104,7 +104,7 @@ if(jsonData) {
 ```
 
 ### 📎 Newman Report
-🖨️ [Download Newman PDF Report](/API%20Testing/Transedia-API-report.pdf)
+🖨️ [Download Newman PDF Report](/API%20Testing/Transedia-API-report.pdf){:target="_blank"}
 
 ---
 
