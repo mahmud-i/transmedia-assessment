@@ -1,1 +1,4 @@
-/transmedia_ui_testing/reports/
+/transmedia_ui_testing/reports/*
+
+# Optional: Allow .gitignore itself to be tracked
+!.gitignore
