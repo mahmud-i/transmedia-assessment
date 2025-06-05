@@ -60,7 +60,7 @@ API Testing/
 ├── Transmedia-API-collection.json
 ├── Transmedia-API-env.json
 ├── Transedia-API-report.html             # Newman reports HTML
-├── Transedia-API-report.pdf              # Newman reports PDF   
+└── Transedia-API-report.pdf              # Newman reports PDF   
 ```
 
 ### 🔍 Features
@@ -104,7 +104,7 @@ if(jsonData) {
 ```
 
 ### 📎 Newman Report
-🖨️ [Download Newman PDF Report](https://github.com/mahmud-i/transmedia-assessment/blob/main/API%20Testing/Transedia-API-report.pdf)
+🖨️ [Download Newman PDF Report](/API%20Testing/Transedia-API-report.pdf)
 
 ---
 
