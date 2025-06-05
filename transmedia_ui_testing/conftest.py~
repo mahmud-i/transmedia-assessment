@@ -1,0 +1,58 @@
+import pytest
+import json
+import os
+import shutil
+import utils as utils
+from playwright.sync_api import sync_playwright
+
+from utils import load_test_data
+
+
+def clear_directory(directory):
+    """Clear the contents of the given directory."""
+    if os.path.exists(directory):
+        # Remove all files and subdirectories in the directory
+        shutil.rmtree(directory)
+    # Create the directory if it doesn't exist
+    os.makedirs(directory, exist_ok=True)
+
+
+def pytest_sessionstart(session):
+    """Clear or create directories before the test session starts."""
+    clear_directory("reports/allure-results")
+    clear_directory("reports/allure-report")
+
+
+
+@pytest.fixture(scope="session", autouse=True)
+def setup():
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=False)
+        context = browser.new_context(viewport={"width": 1080, "height": 950})
+        yield context
+        browser.close()
+
+
+@pytest.fixture(scope="session", autouse=True)
+def base_url():
+    data = utils.load_test_data('resources/test_data.json')
+    return data["env"]["base_url"]
+
+
+def pytest_generate_tests(metafunc):
+    if "param" in metafunc.fixturenames:
+        test_data = utils.load_test_data('resources/test_data.json')
+        test_params = test_data.get("testing_parameters", [])
+        ids = [p.get("board_name", f"case_{i}") for i, p in enumerate(test_params)]
+
+        metafunc.parametrize("param", test_params, ids=ids)
+
+
+
+def pytest_sessionfinish(session, exitstatus):
+    """Generate Allure reports automatically after test run"""
+    # Generate Allure report
+    os.system("allure generate reports/allure-results -o reports/allure-report --clean")
+
+    # Open Allure report
+    os.system("allure open reports/allure-report")

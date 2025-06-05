@@ -1,0 +1,18 @@
+from playwright.sync_api import Page
+import allure
+
+class BoardPage:
+    def __init__(self, page: Page):
+        self.page = page
+
+
+    @allure.step("Verify created Board")
+    def get_board_name(self):
+        try:
+            sibling_locator = self.page.locator("input[name='board-title']")
+            board_name_locator = sibling_locator.locator("xpath=../div[1]")
+            board_name = board_name_locator.inner_text()
+            return board_name if board_name else None
+
+        except Exception as e:
+            return None

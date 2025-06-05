@@ -1,0 +1,25 @@
+import pytest
+import allure
+from pages.filter_page import FilterPage
+from utils import take_screenshot
+
+
+@pytest.mark.usefixtures("setup", "load_test_data", "shared_data")
+@allure.description("Test Case 2: Verify Filter functionality")
+@pytest.mark.dependency(name="test_filter", depends=["test_login"])
+@pytest.mark.parametrize("filter_data", ["cart"])
+@allure.severity(allure.severity_level.NORMAL)
+def test_filter(setup, filter_data, load_test_data, shared_data):
+
+    assert shared_data.get("login_status"), "Login must be successful before filtering"
+
+    page = setup
+    filter_page = FilterPage(page)
+
+    filter_page.navigate_to_home_page()
+    take_screenshot(page,"Navigated to Home Page")
+
+    status = filter_page.perform_filter_action()
+    take_screenshot(page, f"Filter Applied-> {status}")
+    shared_data["filter_status"] = status
+    assert status, "Filter action failed"

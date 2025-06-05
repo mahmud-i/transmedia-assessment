@@ -1,0 +1,110 @@
+import pytest
+import allure
+from utils import take_screenshot
+from pages.dashboard_page import DashboardPage
+from pages.board_page import BoardPage
+
+
+@pytest.mark.usefixtures("setup", "load_test_data")
+class TestEcommerceWebsite:
+
+    @pytest.fixture(scope="class", autouse=True)
+    def setup_class(self, request, setup, load_test_data):
+        """Class-scoped fixture to initialize shared test data"""
+        request.cls.context= setup  # Assign `setup` to `self.context`
+        request.cls.page = setup.new_page()  # Assign `setup` to `self.page`
+        request.cls.test_data = load_test_data  # Assign `load_test_data` to `self.test_data`
+        request.cls.page_instance = DashboardPage(self.page)
+
+
+    @allure.description("TC001: Navigate to Dashboard")
+    @pytest.mark.dependency(name="Navigate_dashboard")
+    @pytest.mark.parametrize("environment", ["env"])
+    @allure.severity(allure.severity_level.CRITICAL)
+    def test_navigate_to_Dashboard(self, environment):
+        status = self.page_instance.navigate_to_dashboard(self.test_data[environment]["base_url"])
+        take_screenshot(self.page,"Navigated to Dashboard Page")
+
+        assert status, "Navigation to Dashboard Failed"
+
+
+    @allure.description("TC002: Create new Board")
+    @pytest.mark.dependency(name="create_board", depends=["Navigate_dashboard"])
+    @pytest.mark.parametrize("testing_data", ["testing_parameters"])
+    @allure.severity(allure.severity_level.CRITICAL)
+    def test_create_board(self, testing_data):
+        board_name = self.test_data[testing_data]["board_name"]
+        status = self.page_instance.create_new_board(board_name)
+        assert status, "Failed to create Board"
+        take_screenshot(self.page, "Created Board")
+
+        self.page_instance = BoardPage(self.page)
+
+        found_board_name = self.page_instance.get_board_name()
+        assert found_board_name == board_name, "Failed to verify created Board"
+
+        # except Exception as e:
+        #     take_screenshot(self.page, "Failed to create Board")
+        #     assert False
+
+
+
+
+
+
+    #
+    # @allure.description("TC003: Verify Add to Cart functionality")
+    # @pytest.mark.dependency(name="test_add_to_cart", depends=["test_filter"])
+    # @pytest.mark.parametrize("cart_data", ["cart"])
+    # @allure.severity(allure.severity_level.CRITICAL)
+    # def test_add_to_cart(self, cart_data):
+    #     assert self.shared_data.get("filter_status"), "Filter must be applied before adding to cart"
+    #
+    #     cart_page = CartPage(self.page)
+    #     cart_page.navigate_to_home_page()
+    #     take_screenshot(self.page, "Navigated to Home Page")
+    #
+    #     for product in self.test_data[cart_data]["products"]:
+    #         status = cart_page.perform_add_to_cart_functionality(product)
+    #         take_screenshot(self.page, f"Added {product} to Cart-> {status}")
+    #         assert status, f"Failed to add {product} to cart"
+    #
+    #     self.shared_data["cart_status"] = True
+    #
+    #
+    #
+    # @allure.description("TC004: Verify Checkout functionality")
+    # @pytest.mark.dependency(name="test_checkout", depends=["test_add_to_cart"])
+    # @pytest.mark.parametrize("checkout_data", ["checkout"])
+    # @allure.severity(allure.severity_level.CRITICAL)
+    # def test_checkout(self, checkout_data):
+    #     assert self.shared_data.get("cart_status"), "Cart must have items before checkout"
+    #
+    #     checkout_page = CheckoutPage(self.page)
+    #     checkout_page.navigate_to_cart_page()
+    #     take_screenshot(self.page,"Navigated to Cart Page")
+    #
+    #     checkout_data = self.test_data[checkout_data]
+    #     status = checkout_page.perform_checkout_functionality(**checkout_data)
+    #     take_screenshot(self.page, f"Checkout-> {status}")
+    #     self.shared_data["checkout_status"] = status
+    #
+    #     assert status, "Checkout Failed"
+    #
+    #
+    #
+    # @allure.description("TC005: Verify Logout functionality")
+    # @pytest.mark.dependency(name="test_logout", depends=["test_checkout"])
+    # @allure.severity(allure.severity_level.NORMAL)
+    # def test_logout(self):
+    #     assert self.shared_data.get("checkout_status"), "Checkout must be successful before logout"
+    #
+    #     logout_page = LogoutPage(self.page)
+    #
+    #     logout_page.navigate_to_home_page()
+    #     take_screenshot(self.page,"Navigated to Logout Page")
+    #
+    #     status = logout_page.perform_logout()
+    #     take_screenshot(self.page, f"Logout-> {status}")
+    #
+    #     assert status, "Logout Failed"

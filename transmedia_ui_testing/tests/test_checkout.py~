@@ -1,0 +1,28 @@
+import pytest
+import allure
+from pages.checkout_page import CheckoutPage
+from utils import take_screenshot
+
+
+@pytest.mark.usefixtures("setup", "load_test_data", "shared_data")
+@allure.description("Test Case 4: Verify Checkout functionality")
+@pytest.mark.dependency(name="test_checkout", depends=["test_add_to_cart"])
+@pytest.mark.parametrize("checkout_data", ["checkout"])
+@allure.severity(allure.severity_level.CRITICAL)
+def test_checkout(setup, checkout_data, load_test_data, shared_data):
+
+    assert shared_data.get("cart_status"), "Cart must have items before checkout"
+
+    page = setup
+    test_data = load_test_data
+
+    checkout_page = CheckoutPage(page)
+    checkout_page.navigate_to_cart_page()
+    take_screenshot(page,"Navigated to Cart Page")
+
+    checkout_data = test_data[checkout_data]
+    status = checkout_page.perform_checkout_functionality(**checkout_data)
+    take_screenshot(page, f"Checkout-> {status}")
+    shared_data["checkout_status"] = status
+
+    assert status, "Checkout Failed"

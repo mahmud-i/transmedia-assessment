@@ -1,0 +1,34 @@
+from playwright.sync_api import Page
+
+class FilterPage:
+    def __init__(self, page: Page):
+        self.page = page
+        self.url = "https://www.saucedemo.com/inventory.html"
+
+    def navigate_to_home_page(self):
+        if self.page.url != self.url:
+            self.page.goto(self.url)
+
+    def perform_filter_action(self):
+        # Locate the dropdown
+        dropdown_element = self.page.locator(".product_sort_container")
+        self.page.wait_for_timeout(3000)
+        dropdown_element.select_option(label="Price (low to high)")
+        self.page.wait_for_timeout(3000)
+
+        # Wait for products to load
+        self.page.wait_for_selector(".inventory_item_price")
+
+        # Extract the product prices
+        product_prices = self.page.locator(".inventory_item_price").all_text_contents()
+        self.page.wait_for_timeout(3000)
+
+        # Check if the products are sorted by price (low to high)
+        for i in range(1, len(product_prices)):
+            price1 = float(product_prices[i - 1].replace("$", "").strip())
+            price2 = float(product_prices[i].replace("$", "").strip())
+
+            if price1 > price2:
+                return False  # Prices are not in ascending order
+
+        return True

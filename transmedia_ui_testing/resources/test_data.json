@@ -1,0 +1,9 @@
+{
+  "env": {
+    "base_url" : "http://localhost:3000"
+  },
+  "testing_parameters": {
+    "board_name": "testing_board_1",
+    "list_name": ["testing_list_1_1", "testing_list_1_2"]
+  }
+}
