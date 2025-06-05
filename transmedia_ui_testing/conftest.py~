@@ -2,10 +2,7 @@ import pytest
 import json
 import os
 import shutil
-import utils as utils
 from playwright.sync_api import sync_playwright
-
-from utils import load_test_data
 
 
 def clear_directory(directory):
@@ -32,20 +29,11 @@ def setup():
         yield context
         browser.close()
 
-
 @pytest.fixture(scope="session", autouse=True)
-def base_url():
-    data = utils.load_test_data('resources/test_data.json')
-    return data["env"]["base_url"]
-
-
-def pytest_generate_tests(metafunc):
-    if "param" in metafunc.fixturenames:
-        test_data = utils.load_test_data('resources/test_data.json')
-        test_params = test_data.get("testing_parameters", [])
-        ids = [p.get("board_name", f"case_{i}") for i, p in enumerate(test_params)]
-
-        metafunc.parametrize("param", test_params, ids=ids)
+def load_test_data():
+    with open('resources/test_data.json', "r", encoding="utf-8") as file:
+        test_data = json.load(file)
+    return test_data
 
 
 
