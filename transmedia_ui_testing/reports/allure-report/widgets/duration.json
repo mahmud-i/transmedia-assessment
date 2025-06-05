@@ -1,1 +1,0 @@
-[{"uid":"3cb866eae2c9af4c","name":"test_create_board[testing_parameters]","time":{"start":1749144491701,"stop":1749144495003,"duration":3302},"status":"passed","severity":"critical"},{"uid":"adeca5e374fdf63f","name":"test_navigate_to_Dashboard[env]","time":{"start":1749144490740,"stop":1749144491695,"duration":955},"status":"passed","severity":"critical"}]
