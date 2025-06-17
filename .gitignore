@@ -1,5 +1,32 @@
-/transmedia_ui_testing/reports/*
+# Python
+__pycache__/
+*.py[cod]
+
+
+# Editor backup files
 *~
+
+
+# Virtual environments
+.env/
+.venv/
+env/
+venv/
+
+
+# IDEs
+.idea/
+.vscode/
+
+
+# Others
+*.log
+
+
+#Reports File
+/transmedia_ui_testing/reports/*
+
+
 
 # Optional: Allow .gitignore itself to be tracked
 !.gitignore
